@@ -1,0 +1,603 @@
+{
+  "document_name": "Consolidated Cash Flow Statement 2026.pdf",
+  "document_type": "cash_flow_statement",
+  "processing_status": "PASS",
+  "overall_confidence": 0.9471,
+  "file_validation": {
+    "file_type": "application/pdf",
+    "is_supported": true,
+    "is_readable": true,
+    "page_count": 2,
+    "status": "PASS",
+    "issues": []
+  },
+  "extracted_data": {
+    "statement_title": null,
+    "company_name": {
+      "value": "HDFC Bank Limited",
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "HDFC  Bank  Limited"
+    },
+    "reporting_period": null,
+    "currency": {
+      "value": "INR",
+      "confidence": 0.95,
+      "evidence": "(=  in  crore)"
+    },
+    "units": {
+      "value": "crore",
+      "confidence": 0.95
+    },
+    "unit_multiplier": 10000000.0,
+    "periods": [
+      "2026",
+      "2025"
+    ],
+    "financial_line_items": [
+      {
+        "section": null,
+        "name": "For the year ended March",
+        "values": {
+          "2025": 31202.0
+        },
+        "page_number": 1,
+        "evidence": "For the year ended March 31, 2026",
+        "is_total": false
+      },
+      {
+        "section": null,
+        "name": "March",
+        "values": {
+          "2026": 31202.0,
+          "2025": 31202.0
+        },
+        "page_number": 1,
+        "evidence": "March 31, 2026 March 31, 2025",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Consolidated Profit after tax and minority interest",
+        "values": {
+          "2026": 76025.97,
+          "2025": 70792.25
+        },
+        "page_number": 1,
+        "evidence": "Consolidated Profit after tax and minority interest 76,025.97 70,792.25",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Add: Provision for income tax ( Refer schedule 18 (9))",
+        "values": {
+          "2026": 22921.99,
+          "2025": 22801.88
+        },
+        "page_number": 1,
+        "evidence": "Add: Provision for income tax ( Refer schedule 18 (9)) 22,921.99 22,801.88",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Consolidated profit before income tax and after minority interest",
+        "values": {
+          "2026": 98947.96,
+          "2025": 93594.13
+        },
+        "page_number": 1,
+        "evidence": "Consolidated profit before income tax and after minority interest 98,947.96 93,594.13",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Depreciation on fixed assets",
+        "values": {
+          "2026": 4194.9,
+          "2025": 3805.23
+        },
+        "page_number": 1,
+        "evidence": "Depreciation on fixed assets 4,194.90 3,805.23",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Loss on revaluation of investments",
+        "values": {
+          "2026": 7739.96,
+          "2025": 3909.1
+        },
+        "page_number": 1,
+        "evidence": "Loss on revaluation of investments 7,739.96 3,909.10",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Amortisation of premium on investments",
+        "values": {
+          "2026": 986.17,
+          "2025": 87.07
+        },
+        "page_number": 1,
+        "evidence": "Amortisation of premium on investments 986.17 87.07",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Profit on sale of fixed assets",
+        "values": {
+          "2026": -207.91,
+          "2025": -22.03
+        },
+        "page_number": 1,
+        "evidence": "Profit on sale of fixed assets (207.91) (22.03)",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "(Profit) / loss on sale of investment in subsidiary",
+        "values": {
+          "2026": -7000.27,
+          "2025": 8.0
+        },
+        "page_number": 1,
+        "evidence": "(Profit) / loss on sale of investment in subsidiary (7,000.27) 8.00",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Provision / charge for non performing assets",
+        "values": {
+          "2026": 14445.98,
+          "2025": 15385.24
+        },
+        "page_number": 1,
+        "evidence": "Provision / charge for non performing assets 14,445.98 15,385.24",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Floating provisions",
+        "values": {
+          "2025": 9000.0
+        },
+        "page_number": 1,
+        "evidence": "Floating provisions 9,000.00",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Provision / (write-back) for standard assets and contingencies",
+        "values": {
+          "2026": 3210.24,
+          "2025": -1210.63
+        },
+        "page_number": 1,
+        "evidence": "Provision / (write-back) for standard assets and contingencies 3,210.24 (1,210.63)",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Employee stock options / units expense",
+        "values": {
+          "2026": 2228.3,
+          "2025": 2086.05
+        },
+        "page_number": 1,
+        "evidence": "Employee stock options / units expense 2,228.30 2,086.05",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Increase in investments",
+        "values": {
+          "2026": -102572.73,
+          "2025": -180362.67
+        },
+        "page_number": 1,
+        "evidence": "Increase in investments (102,572.73) (180,362.67)",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Increase in advances",
+        "values": {
+          "2026": -340270.74,
+          "2025": -169918.22
+        },
+        "page_number": 1,
+        "evidence": "Increase in advances (340,270.74) (169,918.22)",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Increase in deposits",
+        "values": {
+          "2026": 388740.06,
+          "2025": 334010.95
+        },
+        "page_number": 1,
+        "evidence": "Increase in deposits 388,740.06 334,010.95",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Increase in other assets",
+        "values": {
+          "2026": -29678.54,
+          "2025": -10829.67
+        },
+        "page_number": 1,
+        "evidence": "Increase in other assets (29,678.54) (10,829.67)",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Increase in other liabilities and provisions",
+        "values": {
+          "2026": 52338.92,
+          "2025": 13117.98
+        },
+        "page_number": 1,
+        "evidence": "Increase in other liabilities and provisions 52,338.92 13,117.98",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Increase in policyholders' funds",
+        "values": {
+          "2026": 34060.45,
+          "2025": 43289.99
+        },
+        "page_number": 1,
+        "evidence": "Increase in policyholders' funds 34,060.45 43,289.99",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Direct taxes paid (net of refunds)",
+        "values": {
+          "2026": -22656.37,
+          "2025": -19708.68
+        },
+        "page_number": 1,
+        "evidence": "Direct taxes paid (net of refunds) (22,656.37) (19,708.68)",
+        "is_total": false
+      },
+      {
+        "section": "operating",
+        "name": "Net cash flows from operating activities",
+        "values": {
+          "2026": 113506.38,
+          "2025": 127241.84
+        },
+        "page_number": 1,
+        "evidence": "Net cash flows from operating activities 113,506.38 127,241.84",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "Purchase of fixed assets",
+        "values": {
+          "2026": -3889.97,
+          "2025": -4075.89
+        },
+        "page_number": 1,
+        "evidence": "Purchase of fixed assets (3,889.97) (4,075.89)",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "Proceeds from sale of fixed assets",
+        "values": {
+          "2026": 527.56,
+          "2025": 100.72
+        },
+        "page_number": 1,
+        "evidence": "Proceeds from sale of fixed assets 527.56 100.72",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "Proceeds from sale of investment in subsidiary (net of expenses)",
+        "values": {
+          "2026": 9806.0,
+          "2025": 192.0
+        },
+        "page_number": 1,
+        "evidence": "Proceeds from sale of investment in subsidiary (net of expenses) 9,806.00 192.00",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "Investment in subsidiaries",
+        "values": {
+          "2026": -80.87,
+          "2025": -67.47
+        },
+        "page_number": 1,
+        "evidence": "Investment in subsidiaries (80.87) (67.47)",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "Net cash flow from / (used in) investing activities",
+        "values": {
+          "2026": 6362.72,
+          "2025": -3850.64
+        },
+        "page_number": 1,
+        "evidence": "Net cash flow from / (used in) investing activities 6,362.72 (3,850.64)",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "For the year ended March",
+        "values": {
+          "2025": 31202.0
+        },
+        "page_number": 2,
+        "evidence": "For the year ended March 31, 2026",
+        "is_total": false
+      },
+      {
+        "section": "investing",
+        "name": "March",
+        "values": {
+          "2026": 31202.0,
+          "2025": 31202.0
+        },
+        "page_number": 2,
+        "evidence": "March 31, 2026 March 31, 2025",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Increase in minority interest (including issue of ESOPs by subsidiaries)",
+        "values": {
+          "2026": 2331.21,
+          "2025": 2382.88
+        },
+        "page_number": 2,
+        "evidence": "Increase in minority interest (including issue of ESOPs by subsidiaries) 2,331.21 2,382.88",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Proceeds from issue of share capital",
+        "values": {
+          "2026": 5108.5,
+          "2025": 6346.5
+        },
+        "page_number": 2,
+        "evidence": "Proceeds from issue of share capital 5,108.50 6,346.50",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Proceeds from issue of shares through subsidiary IPO (net of issue expenses)",
+        "values": {
+          "2026": 2456.61,
+          "2025": 0.0
+        },
+        "page_number": 2,
+        "evidence": "Proceeds from issue of shares through subsidiary IPO (net of issue expenses) 2,456.61 -",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Proceeds from issue of Tier 1 and Tier 2 capital instruments",
+        "values": {
+          "2026": 700.0,
+          "2025": 1182.0
+        },
+        "page_number": 2,
+        "evidence": "Proceeds from issue of Tier 1 and Tier 2 capital instruments 700.00 1,182.00",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Repayment of Tier 1 and Tier 2 capital instruments",
+        "values": {
+          "2026": 0.0,
+          "2025": -500.0
+        },
+        "page_number": 2,
+        "evidence": "Repayment of Tier 1 and Tier 2 capital instruments - (500.00)",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Repayments from other borrowings (net)",
+        "values": {
+          "2026": -48895.19,
+          "2025": -97062.73
+        },
+        "page_number": 2,
+        "evidence": "Repayments from other borrowings (net) (48,895.19) (97,062.73)",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Dividend paid during the year",
+        "values": {
+          "2026": -20705.98,
+          "2025": -14826.19
+        },
+        "page_number": 2,
+        "evidence": "Dividend paid during the year (20,705.98) (14,826.19)",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Net cash flow used in financing activities",
+        "values": {
+          "2026": -59004.85,
+          "2025": -102477.54
+        },
+        "page_number": 2,
+        "evidence": "Net cash flow used in financing activities (59,004.85) (102,477.54)",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Effect of fluctuation in foreign currency translation reserve",
+        "values": {
+          "2026": 1113.9,
+          "2025": 199.73
+        },
+        "page_number": 2,
+        "evidence": "Effect of fluctuation in foreign currency translation reserve 1,113.90 199.73",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Net increase in cash and cash equivalents",
+        "values": {
+          "2026": 61978.15,
+          "2025": 21113.39
+        },
+        "page_number": 2,
+        "evidence": "Net increase in cash and cash equivalents 61,978.15 21,113.39",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Cash and cash equivalents at the beginning of the year",
+        "values": {
+          "2026": 249947.9,
+          "2025": 228834.51
+        },
+        "page_number": 2,
+        "evidence": "Cash and cash equivalents at the beginning of the year 249,947.90 228,834.51",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Cash and cash equivalents at the end of the year",
+        "values": {
+          "2026": 311926.05,
+          "2025": 249947.9
+        },
+        "page_number": 2,
+        "evidence": "Cash and cash equivalents at the end of the year 311,926.05 249,947.90",
+        "is_total": false
+      },
+      {
+        "section": "financing",
+        "name": "Mumbai, April",
+        "values": {
+          "2025": 18202.0
+        },
+        "page_number": 2,
+        "evidence": "Mumbai, April 18, 2026 Srinivasan Vaidyanathan Ajay Agarwal",
+        "is_total": false
+      }
+    ],
+    "totals": {
+      "operating_cash_flow": {
+        "2026": 113506.38,
+        "2025": 127241.84
+      },
+      "investing_cash_flow": {
+        "2026": 6362.72,
+        "2025": -3850.64
+      },
+      "financing_cash_flow": {
+        "2026": -59004.85,
+        "2025": -102477.54
+      },
+      "fx_translation_adjustment": {
+        "2026": 1113.9,
+        "2025": 199.73
+      },
+      "net_change_in_cash": {
+        "2026": 61978.15,
+        "2025": 21113.39
+      },
+      "opening_cash": {
+        "2026": 249947.9,
+        "2025": 228834.51
+      },
+      "closing_cash": {
+        "2026": 311926.05,
+        "2025": 249947.9
+      }
+    }
+  },
+  "validation": {
+    "checks": [
+      {
+        "name": "net_increase_in_cash_check",
+        "formula": "Operating + Investing + Financing + FX Adjustment == Net Increase in Cash",
+        "operands": {
+          "operating": 113506.38,
+          "investing": 6362.72,
+          "financing": -59004.85,
+          "fx_adjustment": 1113.9
+        },
+        "calculated_value": 61978.15,
+        "reported_value": 61978.15,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "closing_cash_check",
+        "formula": "Opening Cash + Net Increase in Cash == Closing Cash",
+        "operands": {
+          "opening_cash": 249947.9,
+          "net_increase_in_cash": 61978.15
+        },
+        "calculated_value": 311926.05,
+        "reported_value": 311926.05,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "net_increase_in_cash_check",
+        "formula": "Operating + Investing + Financing + FX Adjustment == Net Increase in Cash",
+        "operands": {
+          "operating": 127241.84,
+          "investing": -3850.64,
+          "financing": -102477.54,
+          "fx_adjustment": 199.73
+        },
+        "calculated_value": 21113.39,
+        "reported_value": 21113.39,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "closing_cash_check",
+        "formula": "Opening Cash + Net Increase in Cash == Closing Cash",
+        "operands": {
+          "opening_cash": 228834.51,
+          "net_increase_in_cash": 21113.39
+        },
+        "calculated_value": 249947.9,
+        "reported_value": 249947.9,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      }
+    ],
+    "overall_status": "PASS",
+    "issues": []
+  },
+  "processing_metadata": {
+    "ocr_used": true,
+    "processed_at": "2026-09-10T16:08:00.277830+00:00",
+    "processing_time_ms": 8720,
+    "ocr_provider": "tesseract",
+    "extraction_provider": "rule_based",
+    "page_count": 2,
+    "model_used": null
+  }
+}

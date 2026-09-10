@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intelligent Document Extraction Platform</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-row">
+      <div>
+        <h1>Intelligent Document Extraction</h1>
+        <p>OCR &middot; structured extraction &middot; financial validation, grounded in evidence</p>
+      </div>
+      <span id="health-pill" class="health-pill">checking API&hellip;</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Process a document</h2>
+      <div class="upload-grid">
+        <div class="field">
+          <label for="document-type">Document type</label>
+          <select id="document-type">
+            <option value="invoice">Invoice</option>
+            <option value="balance_sheet">Balance Sheet</option>
+            <option value="profit_and_loss">Profit &amp; Loss</option>
+            <option value="cash_flow_statement">Cash Flow Statement</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="file-input">File (PDF / JPG / PNG, max 3 pages)</label>
+          <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <button id="process-btn">Process Document</button>
+        </div>
+      </div>
+      <div id="upload-status" class="status-line"></div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card"><div class="value" id="stat-total">&ndash;</div><div class="label">Total Documents</div></div>
+      <div class="stat-card pass"><div class="value" id="stat-pass">&ndash;</div><div class="label">Passed</div></div>
+      <div class="stat-card fail"><div class="value" id="stat-fail">&ndash;</div><div class="label">Failed</div></div>
+      <div class="stat-card"><div class="value" id="stat-latest">&ndash;</div><div class="label">Latest Processed</div></div>
+    </section>
+
+    <section class="card">
+      <h2>Processed documents</h2>
+      <div class="toolbar">
+        <input type="text" id="search-input" placeholder="Search by document name&hellip;" />
+        <select id="filter-type">
+          <option value="">All types</option>
+          <option value="invoice">Invoice</option>
+          <option value="balance_sheet">Balance Sheet</option>
+          <option value="profit_and_loss">Profit &amp; Loss</option>
+          <option value="cash_flow_statement">Cash Flow Statement</option>
+        </select>
+        <select id="filter-status">
+          <option value="">All statuses</option>
+          <option value="PASS">PASS</option>
+          <option value="FAILED">FAILED</option>
+        </select>
+        <button class="secondary" id="refresh-btn">Refresh</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Document</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Confidence</th>
+              <th>Processed At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="documents-tbody">
+            <tr><td colspan="6" class="empty-state">Loading&hellip;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>window.API_BASE_URL = "{{ backend_url }}/api/v1";</script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

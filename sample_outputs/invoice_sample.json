@@ -1,0 +1,147 @@
+{
+  "document_name": "X51005361895.jpg",
+  "document_type": "invoice",
+  "processing_status": "PASS",
+  "overall_confidence": 0.8547,
+  "file_validation": {
+    "file_type": "image/jpeg",
+    "is_supported": true,
+    "is_readable": true,
+    "page_count": 1,
+    "status": "PASS",
+    "issues": []
+  },
+  "extracted_data": {
+    "invoice_number": {
+      "value": "1CRO576494",
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "TRN: 1CRO576494"
+    },
+    "invoice_date": {
+      "value": "2018-01-25",
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "25/01/2018 1:22:56PM"
+    },
+    "vendor_name": {
+      "value": "age",
+      "confidence": 0.7,
+      "page_number": 1,
+      "evidence": "age"
+    },
+    "customer_name": {
+      "value": null
+    },
+    "currency": {
+      "value": null
+    },
+    "subtotal": {
+      "value": null
+    },
+    "tax_amount": {
+      "value": null
+    },
+    "discount": {
+      "value": null
+    },
+    "total_amount": {
+      "value": 9.0,
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "Total Includes GST 6% 9.00"
+    },
+    "cash_paid": {
+      "value": 50.0,
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "Cash 50.00"
+    },
+    "change_amount": {
+      "value": 41.0,
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "Change 41.00"
+    },
+    "line_items": [
+      {
+        "description": "KOTAK 8.49",
+        "quantity": 1.0,
+        "unit_price": 8.49,
+        "amount": 9.0,
+        "evidence": "1  KOTAK  8.49  8.49  9.00  SR"
+      }
+    ]
+  },
+  "validation": {
+    "checks": [
+      {
+        "name": "line_item_1_amount_check",
+        "formula": "quantity * unit_price",
+        "operands": {
+          "quantity": 1.0,
+          "unit_price": 8.49
+        },
+        "calculated_value": 8.49,
+        "reported_value": 9.0,
+        "variance": -0.51,
+        "status": "PASS",
+        "period": null,
+        "message": null
+      },
+      {
+        "name": "line_items_sum_matches_subtotal",
+        "formula": "sum(line_items.amount)",
+        "operands": {
+          "item_1": 9.0
+        },
+        "calculated_value": 9.0,
+        "reported_value": 9.0,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": null,
+        "message": null
+      },
+      {
+        "name": "invoice_total_check",
+        "formula": "subtotal + tax_amount - discount",
+        "operands": {
+          "subtotal": null,
+          "tax_amount": null,
+          "discount": null
+        },
+        "calculated_value": null,
+        "reported_value": 9.0,
+        "variance": null,
+        "status": "NOT_APPLICABLE",
+        "period": null,
+        "message": "Required fields for this check were not found in the document."
+      },
+      {
+        "name": "cash_change_check",
+        "formula": "cash_paid - total_amount",
+        "operands": {
+          "cash_paid": 50.0,
+          "total_amount": 9.0
+        },
+        "calculated_value": 41.0,
+        "reported_value": 41.0,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": null,
+        "message": null
+      }
+    ],
+    "overall_status": "PASS",
+    "issues": []
+  },
+  "processing_metadata": {
+    "ocr_used": true,
+    "processed_at": "2026-09-10T16:07:41.369333+00:00",
+    "processing_time_ms": 2313,
+    "ocr_provider": "tesseract",
+    "extraction_provider": "rule_based",
+    "page_count": 1,
+    "model_used": null
+  }
+}

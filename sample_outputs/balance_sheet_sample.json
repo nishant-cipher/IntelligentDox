@@ -1,0 +1,399 @@
+{
+  "document_name": "Consolidated Balance Sheet 2026.pdf",
+  "document_type": "balance_sheet",
+  "processing_status": "PASS",
+  "overall_confidence": 0.9446,
+  "file_validation": {
+    "file_type": "application/pdf",
+    "is_supported": true,
+    "is_readable": true,
+    "page_count": 1,
+    "status": "PASS",
+    "issues": []
+  },
+  "extracted_data": {
+    "statement_title": null,
+    "company_name": {
+      "value": "HDFC Bank Limited",
+      "confidence": 0.95,
+      "page_number": 1,
+      "evidence": "HDFC  Bank  Limited"
+    },
+    "reporting_date": null,
+    "currency": {
+      "value": "INR",
+      "confidence": 0.95,
+      "evidence": "(=  in  crore)"
+    },
+    "units": {
+      "value": "crore",
+      "confidence": 0.95
+    },
+    "unit_multiplier": 10000000.0,
+    "periods": [
+      "2026",
+      "2025"
+    ],
+    "financial_line_items": [
+      {
+        "section": null,
+        "name": "As at March",
+        "values": {
+          "2025": 31202.0
+        },
+        "page_number": 1,
+        "evidence": "As at March 31, 2026",
+        "is_total": false
+      },
+      {
+        "section": null,
+        "name": "March",
+        "values": {
+          "2026": 31202.0,
+          "2025": 31202.0
+        },
+        "page_number": 1,
+        "evidence": "March 31, 2026 March 31, 2025",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Capital",
+        "values": {
+          "2026": 1539.34,
+          "2025": 765.22
+        },
+        "page_number": 1,
+        "evidence": "Capital 1,539.34 765.22",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Employees stock options / units outstanding",
+        "values": {
+          "2026": 4545.11,
+          "2025": 3805.19
+        },
+        "page_number": 1,
+        "evidence": "Employees stock options / units outstanding 18 (4) 4,545.11 3,805.19",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Reserves and surplus",
+        "values": {
+          "2026": 579975.02,
+          "2025": 517218.98
+        },
+        "page_number": 1,
+        "evidence": "Reserves and surplus 579,975.02 517,218.98",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Minority interest",
+        "values": {
+          "2026": 22384.96,
+          "2025": 16359.04
+        },
+        "page_number": 1,
+        "evidence": "Minority interest 2A 22,384.96 16,359.04",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Deposits",
+        "values": {
+          "2026": 3099638.29,
+          "2025": 2710898.23
+        },
+        "page_number": 1,
+        "evidence": "Deposits 3,099,638.29 2,710,898.23",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Borrowings",
+        "values": {
+          "2026": 588484.55,
+          "2025": 634605.57
+        },
+        "page_number": 1,
+        "evidence": "Borrowings 588,484.55 634,605.57",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Other liabilities and provisions",
+        "values": {
+          "2026": 252977.53,
+          "2025": 188163.66
+        },
+        "page_number": 1,
+        "evidence": "Other liabilities and provisions 252,977.53 188,163.66",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Policyholders' funds",
+        "values": {
+          "2026": 358496.04,
+          "2025": 320601.53
+        },
+        "page_number": 1,
+        "evidence": "Policyholders' funds 358,496.04 320,601.53",
+        "is_total": false
+      },
+      {
+        "section": "liabilities_and_equity",
+        "name": "Total",
+        "values": {
+          "2026": 4908040.84,
+          "2025": 4392417.42
+        },
+        "page_number": 1,
+        "evidence": "Total 4,908,040.84 4,392,417.42",
+        "is_total": true
+      },
+      {
+        "section": "assets",
+        "name": "Cash and balances with Reserve Bank of India O",
+        "values": {
+          "2026": 200707.11,
+          "2025": 144390.25
+        },
+        "page_number": 1,
+        "evidence": "Cash and balances with Reserve Bank of India O 200,707.11 144,390.25",
+        "is_total": false
+      },
+      {
+        "section": "assets",
+        "name": "Balances with banks and money at call and short notice N",
+        "values": {
+          "2026": 111218.94,
+          "2025": 105557.65
+        },
+        "page_number": 1,
+        "evidence": "Balances with banks and money at call and short notice N 111,218.94 105,557.65",
+        "is_total": false
+      },
+      {
+        "section": "assets",
+        "name": "Investments Oa",
+        "values": {
+          "2026": 1280216.29,
+          "2025": 1186472.89
+        },
+        "page_number": 1,
+        "evidence": "Investments Oa 1,280,216.29 1,186,472.89",
+        "is_total": false
+      },
+      {
+        "section": "assets",
+        "name": "Advances o",
+        "values": {
+          "2026": 3050783.23,
+          "2025": 2724938.16
+        },
+        "page_number": 1,
+        "evidence": "Advances o 3,050,783.23 2,724,938.16",
+        "is_total": false
+      },
+      {
+        "section": "assets",
+        "name": "Fixed assets a [o)",
+        "values": {
+          "2026": 16491.59,
+          "2025": 15257.94
+        },
+        "page_number": 1,
+        "evidence": "Fixed assets a [o) 16,491.59 15,257.94",
+        "is_total": false
+      },
+      {
+        "section": "assets",
+        "name": "Other assets",
+        "values": {
+          "2026": 248623.68,
+          "2025": 215800.53
+        },
+        "page_number": 1,
+        "evidence": "Other assets 248,623.68 215,800.53",
+        "is_total": false
+      },
+      {
+        "section": "assets",
+        "name": "Total",
+        "values": {
+          "2026": 4908040.84,
+          "2025": 4392417.42
+        },
+        "page_number": 1,
+        "evidence": "Total 4,908,040.84 4,392,417.42",
+        "is_total": true
+      },
+      {
+        "section": null,
+        "name": "Contingent liabilities",
+        "values": {
+          "2026": 3479487.31,
+          "2025": 2709921.85
+        },
+        "page_number": 1,
+        "evidence": "Contingent liabilities 12 3,479,487.31 2,709,921.85",
+        "is_total": false
+      },
+      {
+        "section": null,
+        "name": "Bills for collection",
+        "values": {
+          "2026": 82470.05,
+          "2025": 70679.55
+        },
+        "page_number": 1,
+        "evidence": "Bills for collection 82,470.05 70,679.55",
+        "is_total": false
+      },
+      {
+        "section": null,
+        "name": "Mumbai, April",
+        "values": {
+          "2025": 18202.0
+        },
+        "page_number": 1,
+        "evidence": "Mumbai, April 18, 2026 Srinivasan Vaidyanathan Ajay Agarwal",
+        "is_total": false
+      }
+    ],
+    "totals": {
+      "total_assets": {
+        "2026": 4908040.84,
+        "2025": 4392417.42
+      },
+      "total_liabilities": {
+        "2026": 4908040.84,
+        "2025": 4392417.42
+      },
+      "total_equity": {}
+    }
+  },
+  "validation": {
+    "checks": [
+      {
+        "name": "total_assets_equals_total_liabilities_and_equity",
+        "formula": "Total Capital & Liabilities == Total Assets",
+        "operands": {
+          "total_liabilities_and_equity": 4908040.84,
+          "total_assets": 4908040.84
+        },
+        "calculated_value": 4908040.84,
+        "reported_value": 4908040.84,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "sum_of_asset_line_items_equals_total_assets",
+        "formula": "sum(line_items[assets].values[2026])",
+        "operands": {
+          "Cash and balances with Reserve Bank of India O": 200707.11,
+          "Balances with banks and money at call and short notice N": 111218.94,
+          "Investments Oa": 1280216.29,
+          "Advances o": 3050783.23,
+          "Fixed assets a [o)": 16491.59,
+          "Other assets": 248623.68
+        },
+        "calculated_value": 4908040.84,
+        "reported_value": 4908040.84,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "sum_of_liability_line_items_equals_total",
+        "formula": "sum(line_items[liabilities_and_equity].values[2026])",
+        "operands": {
+          "Capital": 1539.34,
+          "Employees stock options / units outstanding": 4545.11,
+          "Reserves and surplus": 579975.02,
+          "Minority interest": 22384.96,
+          "Deposits": 3099638.29,
+          "Borrowings": 588484.55,
+          "Other liabilities and provisions": 252977.53,
+          "Policyholders' funds": 358496.04
+        },
+        "calculated_value": 4908040.84,
+        "reported_value": 4908040.84,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "total_assets_equals_total_liabilities_and_equity",
+        "formula": "Total Capital & Liabilities == Total Assets",
+        "operands": {
+          "total_liabilities_and_equity": 4392417.42,
+          "total_assets": 4392417.42
+        },
+        "calculated_value": 4392417.42,
+        "reported_value": 4392417.42,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "sum_of_asset_line_items_equals_total_assets",
+        "formula": "sum(line_items[assets].values[2025])",
+        "operands": {
+          "Cash and balances with Reserve Bank of India O": 144390.25,
+          "Balances with banks and money at call and short notice N": 105557.65,
+          "Investments Oa": 1186472.89,
+          "Advances o": 2724938.16,
+          "Fixed assets a [o)": 15257.94,
+          "Other assets": 215800.53
+        },
+        "calculated_value": 4392417.42,
+        "reported_value": 4392417.42,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "sum_of_liability_line_items_equals_total",
+        "formula": "sum(line_items[liabilities_and_equity].values[2025])",
+        "operands": {
+          "Capital": 765.22,
+          "Employees stock options / units outstanding": 3805.19,
+          "Reserves and surplus": 517218.98,
+          "Minority interest": 16359.04,
+          "Deposits": 2710898.23,
+          "Borrowings": 634605.57,
+          "Other liabilities and provisions": 188163.66,
+          "Policyholders' funds": 320601.53
+        },
+        "calculated_value": 4392417.42,
+        "reported_value": 4392417.42,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      }
+    ],
+    "overall_status": "PASS",
+    "issues": []
+  },
+  "processing_metadata": {
+    "ocr_used": true,
+    "processed_at": "2026-09-10T16:07:46.223440+00:00",
+    "processing_time_ms": 4763,
+    "ocr_provider": "tesseract",
+    "extraction_provider": "rule_based",
+    "page_count": 1,
+    "model_used": null
+  }
+}

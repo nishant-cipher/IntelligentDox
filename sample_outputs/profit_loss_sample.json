@@ -1,0 +1,547 @@
+{
+  "document_name": "Consolidated Profit & Loss 2026.pdf",
+  "document_type": "profit_and_loss",
+  "processing_status": "PASS",
+  "overall_confidence": 0.9477,
+  "file_validation": {
+    "file_type": "application/pdf",
+    "is_supported": true,
+    "is_readable": true,
+    "page_count": 1,
+    "status": "PASS",
+    "issues": []
+  },
+  "extracted_data": {
+    "statement_title": null,
+    "company_name": null,
+    "reporting_period": null,
+    "currency": {
+      "value": "INR",
+      "confidence": 0.95,
+      "evidence": "(=  in  crore)"
+    },
+    "units": {
+      "value": "crore",
+      "confidence": 0.95
+    },
+    "unit_multiplier": 10000000.0,
+    "periods": [
+      "2026",
+      "2025"
+    ],
+    "financial_line_items": [
+      {
+        "section": "profit",
+        "name": "For the year ended March",
+        "values": {
+          "2025": 31202.0
+        },
+        "page_number": 1,
+        "evidence": "For the year ended March 31, 2026",
+        "is_total": false
+      },
+      {
+        "section": "profit",
+        "name": "March",
+        "values": {
+          "2026": 31202.0,
+          "2025": 31202.0
+        },
+        "page_number": 1,
+        "evidence": "March 31, 2026 March 31, 2025",
+        "is_total": false
+      },
+      {
+        "section": "income",
+        "name": "Interest earned",
+        "values": {
+          "2026": 348615.15,
+          "2025": 336367.43
+        },
+        "page_number": 1,
+        "evidence": "Interest earned 13 348,615.15 336,367.43",
+        "is_total": false
+      },
+      {
+        "section": "income",
+        "name": "Other income",
+        "values": {
+          "2026": 146847.66,
+          "2025": 134548.5
+        },
+        "page_number": 1,
+        "evidence": "Other income 14 146,847.66 134,548.50",
+        "is_total": false
+      },
+      {
+        "section": "income",
+        "name": "Total",
+        "values": {
+          "2026": 495462.81,
+          "2025": 470915.93
+        },
+        "page_number": 1,
+        "evidence": "Total 495,462.81 470,915.93",
+        "is_total": true
+      },
+      {
+        "section": "expenditure",
+        "name": "Interest expended",
+        "values": {
+          "2026": 185491.23,
+          "2025": 183894.2
+        },
+        "page_number": 1,
+        "evidence": "Interest expended 15 185,491.23 183,894.20",
+        "is_total": false
+      },
+      {
+        "section": "expenditure",
+        "name": "Operating expenses",
+        "values": {
+          "2026": 181173.91,
+          "2025": 176605.07
+        },
+        "page_number": 1,
+        "evidence": "Operating expenses 16 181,173.91 176,605.07",
+        "is_total": false
+      },
+      {
+        "section": "expenditure",
+        "name": "Provisions and contingencies",
+        "values": {
+          "2026": 49578.21,
+          "2025": 36976.49
+        },
+        "page_number": 1,
+        "evidence": "Provisions and contingencies 18 (9) 49,578.21 36,976.49",
+        "is_total": false
+      },
+      {
+        "section": "expenditure",
+        "name": "Total",
+        "values": {
+          "2026": 416243.35,
+          "2025": 397475.76
+        },
+        "page_number": 1,
+        "evidence": "Total 416,243.35 397,475.76",
+        "is_total": true
+      },
+      {
+        "section": "profit",
+        "name": "Consolidated Net Profit for the year before Minority Interest",
+        "values": {
+          "2026": 79219.46,
+          "2025": 73440.17
+        },
+        "page_number": 1,
+        "evidence": "Consolidated Net Profit for the year before Minority Interest 79,219.46 73,440.17",
+        "is_total": false
+      },
+      {
+        "section": "profit",
+        "name": "Less : Minority Interest",
+        "values": {
+          "2026": 3193.49,
+          "2025": 2647.92
+        },
+        "page_number": 1,
+        "evidence": "Less : Minority Interest 3,193.49 2,647.92",
+        "is_total": false
+      },
+      {
+        "section": "profit",
+        "name": "Consolidated Net Profit for the year attributable to the group",
+        "values": {
+          "2026": 76025.97,
+          "2025": 70792.25
+        },
+        "page_number": 1,
+        "evidence": "Consolidated Net Profit for the year attributable to the group 76,025.97 70,792.25",
+        "is_total": false
+      },
+      {
+        "section": "profit",
+        "name": "Brought forward consolidated profit attributable to the group",
+        "values": {
+          "2026": 178692.55,
+          "2025": 150045.57
+        },
+        "page_number": 1,
+        "evidence": "Brought forward consolidated profit attributable to the group 178,692.55 150,045.57",
+        "is_total": false
+      },
+      {
+        "section": "profit",
+        "name": "Total",
+        "values": {
+          "2026": 254718.52,
+          "2025": 220837.82
+        },
+        "page_number": 1,
+        "evidence": "Total 254,718.52 220,837.82",
+        "is_total": true
+      },
+      {
+        "section": "appropriations",
+        "name": "Transfer to Statutory Reserve",
+        "values": {
+          "2026": 19159.57,
+          "2025": 17260.3
+        },
+        "page_number": 1,
+        "evidence": "Transfer to Statutory Reserve 19,159.57 17,260.30",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Interim Dividend paid",
+        "values": {
+          "2026": 3836.57,
+          "2025": 0.0
+        },
+        "page_number": 1,
+        "evidence": "Interim Dividend paid 3,836.57 -",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Transfer to General Reserve",
+        "values": {
+          "2026": 7467.13,
+          "2025": 6734.74
+        },
+        "page_number": 1,
+        "evidence": "Transfer to General Reserve 7,467.13 6,734.74",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Transfer to Special Reserve",
+        "values": {
+          "2026": 3000.0,
+          "2025": 3200.0
+        },
+        "page_number": 1,
+        "evidence": "Transfer to Special Reserve 3,000.00 3,200.00",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Transfer to Capital Reserve",
+        "values": {
+          "2026": 8320.4,
+          "2025": 507.0
+        },
+        "page_number": 1,
+        "evidence": "Transfer to Capital Reserve 8,320.40 507.00",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Dividend pertaining to previous year paid during the year",
+        "values": {
+          "2026": 16869.41,
+          "2025": 14826.19
+        },
+        "page_number": 1,
+        "evidence": "Dividend pertaining to previous year paid during the year 16,869.41 14,826.19",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Transfer to / (from) Minority Interest",
+        "values": {
+          "2026": 476.12,
+          "2025": -382.96
+        },
+        "page_number": 1,
+        "evidence": "Transfer to / (from) Minority Interest 476.12 (382.96)",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Transfer to Other Reserves",
+        "values": {
+          "2026": 1.85,
+          "2025": 0.0
+        },
+        "page_number": 1,
+        "evidence": "Transfer to Other Reserves 1.85 -",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Balance carried over to consolidated balance sheet",
+        "values": {
+          "2026": 195587.47,
+          "2025": 178692.55
+        },
+        "page_number": 1,
+        "evidence": "Balance carried over to consolidated balance sheet 195,587.47 178,692.55",
+        "is_total": false
+      },
+      {
+        "section": "appropriations",
+        "name": "Total",
+        "values": {
+          "2026": 254718.52,
+          "2025": 220837.82
+        },
+        "page_number": 1,
+        "evidence": "Total 254,718.52 220,837.82",
+        "is_total": true
+      },
+      {
+        "section": null,
+        "name": "V EARNINGS PER EQUITY SHARE (Face value ¥ 1/",
+        "values": {
+          "2025": 0.0
+        },
+        "page_number": 1,
+        "evidence": "V EARNINGS PER EQUITY SHARE (Face value ¥ 1/ - per share) 18 (18) z z",
+        "is_total": false
+      },
+      {
+        "section": null,
+        "name": "Basic",
+        "values": {
+          "2026": 49.5,
+          "2025": 46.41
+        },
+        "page_number": 1,
+        "evidence": "Basic 49.50 46.41",
+        "is_total": false
+      },
+      {
+        "section": null,
+        "name": "Diluted",
+        "values": {
+          "2026": 49.28,
+          "2025": 46.2
+        },
+        "page_number": 1,
+        "evidence": "Diluted 49.28 46.20",
+        "is_total": false
+      },
+      {
+        "section": "profit",
+        "name": "Mumbai, April",
+        "values": {
+          "2025": 18202.0
+        },
+        "page_number": 1,
+        "evidence": "Mumbai, April 18, 2026 Srinivasan Vaidyanathan Ajay Agarwal",
+        "is_total": false
+      }
+    ],
+    "totals": {
+      "interest_earned": {
+        "2026": 348615.15,
+        "2025": 336367.43
+      },
+      "other_income": {
+        "2026": 146847.66,
+        "2025": 134548.5
+      },
+      "total_income": {
+        "2026": 495462.81,
+        "2025": 470915.93
+      },
+      "interest_expended": {
+        "2026": 185491.23,
+        "2025": 183894.2
+      },
+      "operating_expenses": {
+        "2026": 181173.91,
+        "2025": 176605.07
+      },
+      "provisions_and_contingencies": {
+        "2026": 49578.21,
+        "2025": 36976.49
+      },
+      "total_expenditure": {
+        "2026": 416243.35,
+        "2025": 397475.76
+      },
+      "net_profit_before_minority_interest": {
+        "2026": 79219.46,
+        "2025": 73440.17
+      },
+      "minority_interest": {
+        "2026": 3193.49,
+        "2025": 2647.92
+      },
+      "net_profit_attributable_to_group": {
+        "2026": 76025.97,
+        "2025": 70792.25
+      },
+      "brought_forward_profit": {
+        "2026": 178692.55,
+        "2025": 150045.57
+      },
+      "total_available_for_appropriation": {
+        "2026": 254718.52,
+        "2025": 220837.82
+      }
+    }
+  },
+  "validation": {
+    "checks": [
+      {
+        "name": "total_income_check",
+        "formula": "Interest Earned + Other Income == Total Income",
+        "operands": {
+          "interest_earned": 348615.15,
+          "other_income": 146847.66
+        },
+        "calculated_value": 495462.81,
+        "reported_value": 495462.81,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "total_expenditure_check",
+        "formula": "Interest Expended + Operating Expenses + Provisions & Contingencies == Total Expenditure",
+        "operands": {
+          "interest_expended": 185491.23,
+          "operating_expenses": 181173.91,
+          "provisions_and_contingencies": 49578.21
+        },
+        "calculated_value": 416243.35,
+        "reported_value": 416243.35,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "net_profit_before_minority_interest_check",
+        "formula": "Total Income - Total Expenditure == Consolidated Net Profit before Minority Interest",
+        "operands": {
+          "total_income": 495462.81,
+          "total_expenditure": 416243.35
+        },
+        "calculated_value": 79219.46,
+        "reported_value": 79219.46,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "net_profit_attributable_to_group_check",
+        "formula": "Profit before Minority Interest - Minority Interest == Net Profit attributable to the Group",
+        "operands": {
+          "net_profit_before_minority_interest": 79219.46,
+          "minority_interest": 3193.49
+        },
+        "calculated_value": 76025.97,
+        "reported_value": 76025.97,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "total_available_for_appropriation_check",
+        "formula": "Current Profit + Brought Forward Profit == Total Available for Appropriation",
+        "operands": {
+          "net_profit_attributable_to_group": 76025.97,
+          "brought_forward_profit": 178692.55
+        },
+        "calculated_value": 254718.52,
+        "reported_value": 254718.52,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2026",
+        "message": null
+      },
+      {
+        "name": "total_income_check",
+        "formula": "Interest Earned + Other Income == Total Income",
+        "operands": {
+          "interest_earned": 336367.43,
+          "other_income": 134548.5
+        },
+        "calculated_value": 470915.93,
+        "reported_value": 470915.93,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "total_expenditure_check",
+        "formula": "Interest Expended + Operating Expenses + Provisions & Contingencies == Total Expenditure",
+        "operands": {
+          "interest_expended": 183894.2,
+          "operating_expenses": 176605.07,
+          "provisions_and_contingencies": 36976.49
+        },
+        "calculated_value": 397475.76,
+        "reported_value": 397475.76,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "net_profit_before_minority_interest_check",
+        "formula": "Total Income - Total Expenditure == Consolidated Net Profit before Minority Interest",
+        "operands": {
+          "total_income": 470915.93,
+          "total_expenditure": 397475.76
+        },
+        "calculated_value": 73440.17,
+        "reported_value": 73440.17,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "net_profit_attributable_to_group_check",
+        "formula": "Profit before Minority Interest - Minority Interest == Net Profit attributable to the Group",
+        "operands": {
+          "net_profit_before_minority_interest": 73440.17,
+          "minority_interest": 2647.92
+        },
+        "calculated_value": 70792.25,
+        "reported_value": 70792.25,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      },
+      {
+        "name": "total_available_for_appropriation_check",
+        "formula": "Current Profit + Brought Forward Profit == Total Available for Appropriation",
+        "operands": {
+          "net_profit_attributable_to_group": 70792.25,
+          "brought_forward_profit": 150045.57
+        },
+        "calculated_value": 220837.82,
+        "reported_value": 220837.82,
+        "variance": 0.0,
+        "status": "PASS",
+        "period": "2025",
+        "message": null
+      }
+    ],
+    "overall_status": "PASS",
+    "issues": []
+  },
+  "processing_metadata": {
+    "ocr_used": true,
+    "processed_at": "2026-09-10T16:07:51.476432+00:00",
+    "processing_time_ms": 5135,
+    "ocr_provider": "tesseract",
+    "extraction_provider": "rule_based",
+    "page_count": 1,
+    "model_used": null
+  }
+}

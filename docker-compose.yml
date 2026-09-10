@@ -1,0 +1,55 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=sqlite:///./data/documents.db
+      - UPLOAD_DIR=/app/uploads
+      - MAX_FILE_SIZE_MB=15
+      - MAX_PAGES=3
+      - OCR_LANGUAGE=eng
+      - VALIDATION_ABSOLUTE_TOLERANCE=1.0
+      - VALIDATION_RELATIVE_TOLERANCE=0.01
+      - CORS_ORIGINS=*
+      - LLM_PROVIDER=none
+    volumes:
+      - backend-data:/app/data
+      - backend-uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - ENVIRONMENT=development
+    depends_on:
+      - backend
+
+  # Optional: uncomment to run against PostgreSQL instead of SQLite.
+  # postgres:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     - POSTGRES_USER=docuser
+  #     - POSTGRES_PASSWORD=docpass
+  #     - POSTGRES_DB=documentdb
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  backend-data:
+  backend-uploads:
+  # postgres-data:
