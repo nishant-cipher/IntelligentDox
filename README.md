@@ -1,281 +1,546 @@
-# Intelligent Document Extraction, Validation & API Platform
+# IntelligentDox
 
-An end-to-end AI-powered platform that ingests real invoices and financial statements (PDF or image),
-runs them through a layered OCR pipeline, extracts structured, evidence-grounded data, independently
-recomputes the document's own arithmetic to check it for correctness, and serves everything through a
-versioned REST API with a working dashboard on top.
+### Intelligent Document Extraction, Validation & API Platform
 
-Built for the "Intelligent Document Extraction, Validation & API Platform" AI Engineer internship case
-study.
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Flask](https://img.shields.io/badge/Flask-Frontend-black?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![OCR](https://img.shields.io/badge/OCR-Tesseract-green)](https://github.com/tesseract-ocr/tesseract)
+[![License](https://img.shields.io/badge/License-Educational-lightgrey)](#)
+
+**IntelligentDox** is an end-to-end document intelligence platform for extracting, validating, and serving structured information from invoices and financial statements.
+
+The platform accepts **PDF, JPG, and PNG** documents, combines native PDF extraction with **Tesseract OCR**, reconstructs financial table rows from OCR bounding boxes, produces **evidence-grounded structured JSON**, and independently recomputes financial relationships to determine whether extracted figures are internally consistent.
+
+> Built for the **Intelligent Document Extraction, Validation & API Platform** AI Engineer internship case study.
+
+## 🌐 Live Demo
+
+**Frontend:**  
+https://intelligentdox-front-production.up.railway.app/
+
+The application is deployed on **Railway** using separate containerized backend and frontend services.
+
+> **Note:** The backend public URL is intentionally not hardcoded here until it is finalized. The frontend communicates with the deployed backend through the `BACKEND_URL` environment variable.
 
 ---
 
-## 1. Problem Statement
+## ✨ Key Features
 
-Organizations receive large volumes of unstructured financial documents — invoices, balance sheets,
-profit & loss statements, cash flow statements — as scanned PDFs or photographed images. Turning these
-into structured, trustworthy data normally means manual data entry, which is slow and error-prone, and
-naive OCR-to-JSON pipelines don't verify that the numbers they extracted are actually internally
-consistent.
+- 📄 **Multi-format document ingestion** — PDF, JPG, and PNG
+- 🔍 **Layered OCR pipeline** — native PDF text first, Tesseract fallback for scanned documents
+- 📐 **Table-aware OCR reconstruction** using word-level bounding boxes
+- 🧠 **Deterministic document extraction** using regex and structural heuristics
+- 🧾 **Four supported document types**
+  - Invoice
+  - Balance Sheet
+  - Profit & Loss Statement
+  - Cash Flow Statement
+- 🎯 **Evidence-grounded extraction** — important fields include confidence, page number, and source evidence
+- 🧮 **Independent financial validation** — extracted numbers are recomputed instead of blindly trusted
+- ✅ **PASS / FAIL / NOT_APPLICABLE** validation states
+- 🗄️ **SQLAlchemy persistence** with SQLite locally and PostgreSQL support for production
+- 🌐 **Versioned REST API** with interactive Swagger documentation
+- 🖥️ **Web dashboard** for upload, processing, validation results, and raw JSON
+- 🤖 **Optional Anthropic LLM gap-fill** — deterministic extraction remains the primary path
+- 🐳 **Dockerized architecture** with independent backend and frontend containers
+- 🧪 **Automated test suite** covering validation, extraction, and API behavior
 
-This platform automates the full chain: **validate the upload → extract text (native or OCR) →
-extract structured fields and tables → independently verify the document's arithmetic → persist the
-result → expose it over a REST API and a dashboard**, and it does this **without hardcoding anything
-about the specific dataset** — the same code path processes any invoice, balance sheet, P&L, or cash
-flow statement of the four supported types.
+---
 
-## 2. Solution Overview
+# 📋 Table of Contents
 
-- The user selects a document type (`invoice`, `balance_sheet`, `profit_and_loss`,
-  `cash_flow_statement`) and uploads a PDF/JPG/PNG file (max 3 pages).
-- The backend validates the file (type, integrity, page count) using magic-byte sniffing, not just the
-  filename extension.
-- Text is extracted natively from the PDF first (PyMuPDF); if that yields no usable text (a scanned
-  page), the page is rendered to an image and OCR'd with Tesseract.
-- A **deterministic, rule-based extraction engine** (regex + table-row reconstruction from OCR bounding
-  boxes) turns the raw text into a structured, document-type-specific JSON shape, with every important
-  field carrying `confidence`, `page_number`, and the literal `evidence` text it was read from.
-- An **independent financial validation engine** re-derives the case study's accounting formulas
-  (e.g. `Total Assets == Total Capital & Liabilities`, `Interest Earned + Other Income == Total Income`)
-  from the extracted numbers and compares them against what the document itself reports, per
-  comparative period, with a configurable tolerance.
-- The result is persisted (SQLAlchemy, SQLite locally / Postgres-ready in production) and returned as
-  one consistent JSON response shape regardless of document type.
-- A small dashboard (Flask + vanilla HTML/CSS/JS) lets a reviewer upload documents, see PASS/FAILED
-  status at a glance, and drill into any document's extracted fields, financial line items, validation
-  checks, and raw JSON.
-- An **optional** LLM-assisted extraction pass (Anthropic) can supplement (never override) the
-  deterministic pass when an API key is configured — the system is fully functional without one.
+- [Problem Statement](#-problem-statement)
+- [How It Works](#-how-it-works)
+- [Architecture](#-architecture)
+- [Technology Stack](#-technology-stack)
+- [Supported Documents](#-supported-documents)
+- [OCR Pipeline](#-ocr-pipeline)
+- [Extraction Engine](#-extraction-engine)
+- [Financial Validation](#-financial-validation)
+- [API](#-api)
+- [Dataset](#-dataset)
+- [Results](#-results)
+- [Project Structure](#-project-structure)
+- [Local Setup](#-local-setup)
+- [Docker](#-docker)
+- [Railway Deployment](#-railway-deployment)
+- [Environment Variables](#-environment-variables)
+- [Testing](#-testing)
+- [Known Limitations](#-known-limitations)
+- [Future Improvements](#-future-improvements)
+- [AI-Assisted Development](#-ai-assisted-development)
 
-## 3. Architecture
+---
 
-See [`docs/architecture.png`](docs/architecture.png).
+# 🎯 Problem Statement
 
-```
-Frontend (Flask)  ──fetch()──>  FastAPI backend
-                                    │
-                                    ▼
-                         Document Validation Service
-                        (extension, MIME sniff, integrity, page count)
-                                    │
-                                    ▼
-                            OCR / Text Extraction
-              PyMuPDF native text ──quality check──> Tesseract OCR fallback
-                     (render @300dpi + bounding-box row reconstruction)
-                                    │
-                                    ▼
-                       Structured Extraction Service
-        (document-type-specific regex + table parsing → evidence-grounded JSON)
-                                    │
-                          (optional) LLM gap-fill
-                                    │
-                                    ▼
-                       Financial Validation Service
-              (recomputes formulas per period → PASS/FAIL/NOT_APPLICABLE)
-                                    │
-                                    ▼
-                          Document Repository (SQLAlchemy)
-                        SQLite (dev) / PostgreSQL (production)
-                                    │
-                                    ▼
-                          Structured JSON API response
-                                    │
-                                    ▼
-                     Dashboard + Document Result page + Swagger
-```
+Organizations process large volumes of invoices and financial statements in the form of scanned PDFs, photographed documents, and digital files.
 
-## 4. Technology Stack
+Traditional manual data entry is:
 
-| Layer | Technology |
-|---|---|
-| Backend framework | FastAPI + Uvicorn |
-| Validation/schemas | Pydantic v2 |
-| Database ORM | SQLAlchemy 2.0 |
-| Database | SQLite (local) / PostgreSQL-compatible (production) |
-| Native PDF text | PyMuPDF (`fitz`) |
-| OCR engine | Tesseract (via `pytesseract`) |
-| Image handling | Pillow (incl. EXIF orientation correction) |
-| Optional LLM | Anthropic Messages API (`anthropic` SDK) |
-| Frontend | Flask + Jinja2 + vanilla HTML/CSS/JS (no frontend framework) |
-| Testing | pytest, FastAPI `TestClient` |
-| Containerization | Docker, docker-compose |
+- slow,
+- expensive,
+- difficult to scale,
+- and vulnerable to transcription errors.
 
-### 4.1 Why each technology
+A basic **OCR → JSON** pipeline solves only the extraction problem. It does not answer the more important question:
 
-- **FastAPI**: native async support, automatic OpenAPI/Swagger docs (`/docs`) generated straight from
-  the Pydantic models, first-class `multipart/form-data` handling for file uploads, and a clean
-  dependency-injection model (used here for DB sessions).
-- **PyMuPDF (`fitz`)**: fast, dependency-light native PDF text/page rendering; no external Poppler
-  binary needed, which matters for a simple Docker/production deployment story.
-- **Tesseract**: mature, free, open-source, fully local OCR engine — no per-page API cost, no external
-  network dependency, and it exposes word-level bounding boxes (`image_to_data`), which this project
-  relies on to reconstruct table rows (see §8).
-- **SQLAlchemy**: the ORM abstracts SQLite vs. PostgreSQL behind one `DATABASE_URL` — switching database
-  backends for production is a one-line environment variable change, no code change.
-- **Pydantic**: guarantees the API's outer response shape is always consistent and self-documenting,
-  while still allowing the inherently variable `extracted_data` payload to be a flexible dict.
-- **Flask for the frontend**: the case study explicitly asks for simple HTML/CSS/JS, not a frontend
-  framework; Flask is the smallest reasonable way to serve templates + static assets and inject the
-  backend URL as configuration.
-- **Anthropic SDK (optional)**: only used if `LLM_PROVIDER=anthropic` and `LLM_API_KEY` are set; the
-  rule-based extraction engine is the real, tested, primary path (see §9 and §13).
+> **Are the numbers extracted from the document internally consistent?**
 
-## 5. Dataset Structure
+IntelligentDox addresses both problems:
 
-```
-dataset/
-├── Balance Sheet/       10 scanned PDFs (2017-2026), 1 page each
-├── Cash Flows/          10 scanned PDFs (2017-2026), 1-2 pages each
-├── Profit & Loss/       10 scanned PDFs (2017-2026), 1 page each
-└── Invoices/            20 photographed/scanned images (JPG) - receipts and GST tax invoices
+```text
+Document
+   ↓
+File Validation
+   ↓
+Text Extraction / OCR
+   ↓
+Structured Data Extraction
+   ↓
+Evidence + Confidence
+   ↓
+Independent Financial Validation
+   ↓
+Persistent Result
+   ↓
+REST API + Dashboard
 ```
 
-Full findings from directly inspecting representative files from every category — page counts, whether
-PDFs are native-text or scanned, table layouts, negative-number conventions, currency/unit notation,
-OCR challenges, and the assumptions the extraction logic makes — are documented in
-[`docs/dataset_analysis.md`](docs/dataset_analysis.md), generated by
-[`scripts/analyze_dataset.py`](scripts/analyze_dataset.py) by literally running the application's own
-OCR pipeline against every dataset file (nothing in that report is hand-typed).
+The implementation is deliberately **dataset-independent**. It does not hardcode individual documents and uses the same processing architecture across invoices, balance sheets, P&L statements, and cash flow statements.
 
-## 6. OCR Approach
+---
 
-Layered, in `app/services/ocr_service.py`:
+# ⚙️ How It Works
 
-1. **Native text extraction** (`extract_text_from_pdf`) — PyMuPDF's `get_text()` per page.
-2. **Quality check** (`is_text_quality_sufficient`) — a page is trusted as "native" only if it has
-   enough alphanumeric content; every financial statement PDF in this dataset turned out to be a
-   scanned image with zero native text, so this always falls through to OCR for them.
-3. **OCR fallback** — the page is rendered to a bitmap at 300 DPI (`render_pdf_page`) and run through
-   Tesseract (`run_ocr`). 300 DPI specifically matters: at a lower preview DPI (~144), OCR accuracy on
-   small header text was visibly worse in testing.
-4. **Table-aware row reconstruction** — this was the single highest-impact design decision. Tesseract's
-   own page-segmentation groups text into blocks/lines by its own layout analysis, which for a wide
-   table with far-apart columns (item name ... schedule ... value ... value) frequently puts the whole
-   label column in one block and both value columns in separate blocks *later* in the output — i.e. it
-   does **not** preserve "row" order for tables. `_reconstruct_rows` in `ocr_service.py` instead takes
-   every OCR'd word's raw `(left, top, width, height)` box, clusters words into rows purely by vertical
-   pixel position (tolerant to a fraction of the median word height), and sorts each row's words
-   left-to-right. This reliably reconstructs `"Capital  1  1,539.34  765.22"` as one line, which a
-   naive `pytesseract.image_to_string()` call does not. This is exposed as `PageText.row_text` /
-   `table_lines` and is the primary text source financial-statement table parsing uses.
-5. **Images (JPG/PNG)** go straight through the same OCR + row-reconstruction path.
-6. **EXIF orientation correction** — phone photos frequently store rotation as EXIF metadata rather
-   than rotating the actual pixels. Without correcting for this (`PIL.ImageOps.exif_transpose`), one
-   dataset invoice photographed in portrait-with-EXIF-rotation-6 OCR'd as complete noise; after the fix
-   it reads correctly. This is exactly the kind of bug real deployments hit constantly with
-   phone-submitted documents.
+### 1. Upload
 
-Every extracted page keeps its `page_number`, so every field's `evidence`/`page_number` is traceable
-back to where it was actually read.
+The user selects a document type and uploads a PDF, JPG, or PNG.
 
-## 7. Extraction Approach
+Maximum PDF length: **3 pages**.
 
-`app/services/extraction_service.py` is purely rule-based (regex + heuristics) — **no LLM is required**
-for the pipeline to work, which was a deliberate choice validated by running the whole dataset through
-it (see §13). Each of the four document types has its own extractor function, but they share:
+### 2. File Validation
 
-- **Number normalization** (`app/utils/number_utils.py`): thousands separators, parentheses/brackets as
-  negative, currency symbols/codes, and explicit scale words (`crore`, `lakh`, `million`, `thousand`,
-  and the `'000` notation) — only ever applied when the text explicitly says so, never guessed.
-- **Financial-table row parsing**: reconstructed OCR rows are scanned; a header line with no monetary
-  amount switches the "current section" (e.g. `ASSETS`, `Cash flows from operating activities:`); a
-  line carrying `len(periods)` trailing monetary tokens becomes a structured line item
-  `{section, name, values: {period: number}, page_number, evidence, is_total}`. A canonical
-  alias table (e.g. "Interest Earned" → `interest_earned`, a `Total` row inside the `assets` section →
-  `total_assets`) then builds the `totals` dict the financial validation engine reads.
-- **Invoices**: labeled-field regexes for invoice number/date/vendor/customer/amounts, plus a
-  table-region line-item parser that copes with two different real row shapes found in the dataset —
-  `"<description> ... <price> <amount>"` (formal GST invoices) and `"<qty> <description> <price>
-  <amount>"` (till receipts) — while rejecting numbers that are clearly part of a compound spec token
-  (e.g. `"48X230ML"`) rather than a real price/amount column, since a genuine amount in this dataset's
-  convention always carries a decimal point.
+The backend validates:
 
-Every important field is emitted as `{"value", "confidence", "page_number", "evidence"}` (see
-`app/utils/confidence_utils.make_field`). A field that cannot be reliably read is `null` — the code
-never invents or infers a value that isn't backed by matched text.
+- file type,
+- content signature / magic bytes,
+- file integrity,
+- readability,
+- page count,
+- configured size limits.
 
-## 8. Financial Validation
+Filename extensions alone are not trusted.
 
-`app/services/financial_validation_service.py` is intentionally the *only* place arithmetic happens —
-it never touches OCR or raw text, only the already-parsed numbers in `extracted_data`. Every check
-returns:
+### 3. Text Extraction
+
+For PDFs:
+
+1. PyMuPDF attempts native text extraction.
+2. A quality check determines whether the extracted text is usable.
+3. If the document is scanned or the text quality is insufficient, the page is rendered at **300 DPI**.
+4. Tesseract OCR processes the rendered image.
+
+Images go directly through the OCR pipeline.
+
+### 4. Table Reconstruction
+
+OCR word-level bounding boxes are used to reconstruct rows based on vertical position and then sort words left-to-right.
+
+This is particularly important for financial statements where a naive OCR text stream can separate labels and numeric columns.
+
+### 5. Structured Extraction
+
+Document-specific extraction logic converts OCR/native text into structured fields and financial line items.
+
+Each important field can carry:
 
 ```json
 {
-  "name": "total_income_check",
-  "formula": "Interest Earned + Other Income == Total Income",
-  "operands": {"interest_earned": 348615.15, "other_income": 146847.66},
-  "calculated_value": 495462.81,
-  "reported_value": 495462.81,
-  "variance": 0.0,
-  "status": "PASS",
-  "period": "2026"
+  "value": "...",
+  "confidence": 0.95,
+  "page_number": 1,
+  "evidence": "..."
 }
 ```
 
-Implemented formulas:
+The system does not fabricate missing values.
 
-- **Invoice**: `quantity × unit_price ≈ amount` per line, `sum(line items) ≈ subtotal`,
-  `subtotal + tax − discount ≈ total`, `cash_paid − total ≈ change`.
-- **Balance sheet**: `Total Capital & Liabilities ≈ Total Assets`, plus (when enough line items were
-  read) `sum(asset components) ≈ total assets` and `sum(liability components) ≈ total liabilities`.
-- **P&L**: all five case-study formulas (`Interest Earned + Other Income ≈ Total Income`,
-  `Interest Expended + Operating Expenses + Provisions ≈ Total Expenditure`,
-  `Total Income − Total Expenditure ≈ Net Profit before Minority Interest`,
-  `Profit before MI − Minority Interest ≈ Net Profit attributable to Group`,
-  `Current Profit + Brought Forward ≈ Total Available for Appropriation`), each period independently,
-  plus generic `revenue − cost_of_sales ≈ gross_profit` for non-bank-format P&Ls.
-- **Cash flow**: `Operating + Investing + Financing + FX ≈ Net Increase in Cash`,
-  `Opening Cash + Net Increase ≈ Closing Cash`, each period independently.
+### 6. Independent Validation
 
-**Tolerance** (`app/core/config.py`, overridable via env vars):
+The validation engine receives the extracted numbers and independently recomputes financial formulas.
 
-```
-VALIDATION_ABSOLUTE_TOLERANCE=1.0    # absolute difference allowed
-VALIDATION_RELATIVE_TOLERANCE=0.01   # 1% relative difference allowed
+Example:
+
+```text
+Interest Earned + Other Income
+              ↓
+       Calculated Total
+              ↓
+     Compare with Reported Total
+              ↓
+       PASS / FAIL
 ```
 
-`app/utils/number_utils.numbers_match` passes if **either** tolerance is satisfied — this matters
-because these are figures in crore/thousands with rounding in the source document itself, so a
-same-document PASS should not require bit-exact floats.
+### 7. Persistence & API
 
-If a required operand is missing, the check's status is `NOT_APPLICABLE` (never fabricated as PASS or
-skipped silently) — every check the engine knows how to run is always present in the response, whether
-or not it had the data to actually run it.
+The processing result is stored through SQLAlchemy and exposed through a versioned REST API.
 
-**`processing_status` logic** (`app/services/document_service.determine_processing_status`):
-`FAILED` if either (a) extraction found no meaningful core data for that document type, or (b) any
-financial check's status is `FAIL`. A document with only `NOT_APPLICABLE` checks (no arithmetic could
-be verified because required fields weren't present) is **not** automatically failed for that reason
-alone — only an actual mismatch does that.
+### 8. Dashboard
 
-## 9. Database
+The Flask dashboard provides:
 
-`app/models/document.py` — one `documents` table (id, document_name, document_type,
-processing_status, file_type, page_count, is_supported, is_readable, overall_confidence,
-file_validation JSON, extracted_data JSON, validation_result JSON, processing_metadata JSON,
-created_at, updated_at). All access goes through `app/repositories/document_repository.py` — no raw
-queries anywhere else. Re-processing the same `document_name` inserts a new row;
-`GET /documents/{name}` returns the most recent one; `GET /documents` returns the latest version per
-distinct name. `DATABASE_URL` defaults to a local SQLite file but is Postgres-ready — swapping to
-`postgresql://user:pass@host:5432/db` requires no code changes (this is why `psycopg2-binary` is in
-`requirements.txt`).
+- document upload,
+- processing status,
+- PASS / FAILED visibility,
+- extracted fields,
+- financial line items,
+- validation checks,
+- raw JSON results.
 
-## 10. API Documentation
+---
 
-Base path: `/api/v1`. Interactive Swagger UI at **`/docs`**.
+# 🏗️ Architecture
 
-| Method | Path | Purpose |
+```text
+                         ┌──────────────────────────┐
+                         │       Web Dashboard      │
+                         │    Flask + Jinja2 + JS   │
+                         └────────────┬─────────────┘
+                                      │
+                                  HTTP / API
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │       FastAPI Backend    │
+                         │        /api/v1           │
+                         └────────────┬─────────────┘
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    │                                   │
+                    ▼                                   ▼
+          ┌────────────────────┐              ┌────────────────────┐
+          │ Document Validation│              │ Text / OCR Service │
+          │                    │              │                    │
+          │ Type / MIME /      │              │ PyMuPDF            │
+          │ Integrity / Pages  │              │ Tesseract fallback │
+          └─────────┬──────────┘              └─────────┬──────────┘
+                    │                                   │
+                    └─────────────────┬─────────────────┘
+                                      ▼
+                         ┌──────────────────────────┐
+                         │ Structured Extraction    │
+                         │                          │
+                         │ Regex + heuristics +    │
+                         │ OCR table reconstruction│
+                         └────────────┬─────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │ Financial Validation     │
+                         │                          │
+                         │ Formula recomputation   │
+                         │ + tolerance comparison  │
+                         └────────────┬─────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │ Document Repository      │
+                         │                          │
+                         │ SQLAlchemy               │
+                         │ SQLite / PostgreSQL      │
+                         └────────────┬─────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │ Structured JSON Response │
+                         └──────────────────────────┘
+```
+
+Architecture diagram: [`docs/architecture.png`](docs/architecture.png)
+
+---
+
+# 🧰 Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | FastAPI + Uvicorn |
+| API Schemas | Pydantic v2 |
+| ORM | SQLAlchemy 2.0 |
+| Local Database | SQLite |
+| Production Database | PostgreSQL |
+| PDF Processing | PyMuPDF |
+| OCR | Tesseract + pytesseract |
+| Image Processing | Pillow |
+| Frontend | Flask + Jinja2 |
+| Frontend UI | HTML + CSS + Vanilla JavaScript |
+| Optional LLM | Anthropic SDK |
+| Testing | pytest + FastAPI TestClient |
+| Containerization | Docker + Docker Compose |
+| Cloud Deployment | Railway |
+
+### Why this stack?
+
+**FastAPI** provides automatic OpenAPI/Swagger documentation, typed request/response models, and clean dependency injection.
+
+**PyMuPDF** provides fast native PDF text extraction and page rendering without requiring an external Poppler dependency.
+
+**Tesseract** provides local, open-source OCR and word-level bounding boxes used by the table reconstruction algorithm.
+
+**SQLAlchemy** abstracts the database layer so SQLite can be used locally while PostgreSQL can be used in production.
+
+**Flask** keeps the frontend lightweight and aligned with the requirement for HTML/CSS/JavaScript rather than a heavy frontend framework.
+
+---
+
+# 📄 Supported Documents
+
+| Document Type | Dataset | Supported |
+|---|---:|:---:|
+| Balance Sheet | 10 | ✅ |
+| Cash Flow Statement | 10 | ✅ |
+| Profit & Loss | 10 | ✅ |
+| Invoice | 20 | ✅ |
+| **Total** | **50** | **✅** |
+
+The dataset contains:
+
+```text
+dataset/
+├── Balance Sheet/       10 scanned PDFs (2017–2026)
+├── Cash Flows/          10 scanned PDFs (2017–2026)
+├── Profit & Loss/       10 scanned PDFs (2017–2026)
+└── Invoices/            20 photographed/scanned JPGs
+```
+
+A detailed dataset investigation is available in:
+
+[`docs/dataset_analysis.md`](docs/dataset_analysis.md)
+
+The analysis was generated by running the application's OCR pipeline against the dataset rather than manually entering observations.
+
+---
+
+# 🔍 OCR Pipeline
+
+The OCR system uses a layered strategy:
+
+```text
+                    PDF
+                     │
+                     ▼
+              PyMuPDF get_text()
+                     │
+              Quality sufficient?
+                /          \
+              YES           NO
+               │             │
+               ▼             ▼
+          Native text    Render @ 300 DPI
+                             │
+                             ▼
+                         Tesseract
+                             │
+                             ▼
+                  Word-level bounding boxes
+                             │
+                             ▼
+                    Row reconstruction
+```
+
+## Table-aware row reconstruction
+
+A major challenge with financial statements is that standard OCR output does not necessarily preserve the logical row structure of a table.
+
+The implementation therefore:
+
+1. captures every OCR word's bounding box,
+2. clusters words using vertical position,
+3. sorts words left-to-right,
+4. reconstructs logical rows,
+5. exposes the reconstructed content to the extraction engine.
+
+For example:
+
+```text
+Capital        1       1,539.34       765.22
+```
+
+can be reconstructed as a single financial row instead of being separated into unrelated OCR blocks.
+
+## Image orientation
+
+Phone photographs can store rotation in EXIF metadata rather than physically rotating the pixels.
+
+The pipeline applies EXIF orientation correction before OCR to prevent rotated invoices from producing unusable OCR output.
+
+---
+
+# 🧠 Extraction Engine
+
+The primary extraction engine is **deterministic and rule-based**.
+
+It uses:
+
+- regular expressions,
+- aliases,
+- number normalization,
+- financial-table parsing,
+- OCR row reconstruction,
+- document-type-specific heuristics.
+
+### Number normalization
+
+The parser handles explicit conventions such as:
+
+- thousands separators,
+- parentheses/brackets for negative values,
+- currency symbols and codes,
+- crore,
+- lakh,
+- million,
+- thousand,
+- `'000` notation.
+
+Scaling is only applied when the document explicitly indicates the scale.
+
+### Evidence grounding
+
+Important extracted fields retain:
+
+```text
+value
+confidence
+page_number
+evidence
+```
+
+If a value cannot be reliably extracted, it is returned as `null` instead of being guessed.
+
+### Optional LLM support
+
+Anthropic can optionally provide an additional extraction/gap-fill pass.
+
+It is **not required** for the core pipeline.
+
+```text
+LLM_PROVIDER=none
+```
+
+keeps the system fully deterministic.
+
+---
+
+# 🧮 Financial Validation
+
+The validation engine is intentionally separated from OCR and extraction.
+
+It operates only on already-extracted numerical values.
+
+## Invoice
+
+```text
+quantity × unit_price ≈ amount
+sum(line items) ≈ subtotal
+subtotal + tax − discount ≈ total
+cash_paid − total ≈ change
+```
+
+## Balance Sheet
+
+```text
+Total Capital & Liabilities ≈ Total Assets
+```
+
+Additional component checks are performed when sufficient line items are available.
+
+## Profit & Loss
+
+```text
+Interest Earned + Other Income ≈ Total Income
+
+Interest Expended + Operating Expenses + Provisions
+≈ Total Expenditure
+
+Total Income − Total Expenditure
+≈ Net Profit before Minority Interest
+
+Profit before MI − Minority Interest
+≈ Net Profit attributable to Group
+
+Current Profit + Brought Forward
+≈ Total Available for Appropriation
+```
+
+A generic:
+
+```text
+Revenue − Cost of Sales ≈ Gross Profit
+```
+
+check is also supported for non-bank-format P&Ls.
+
+## Cash Flow
+
+```text
+Operating + Investing + Financing + FX
+≈ Net Increase in Cash
+
+Opening Cash + Net Increase
+≈ Closing Cash
+```
+
+## Validation tolerance
+
+```text
+VALIDATION_ABSOLUTE_TOLERANCE=1.0
+VALIDATION_RELATIVE_TOLERANCE=0.01
+```
+
+A check passes when either tolerance is satisfied.
+
+This accommodates rounding in financial statements.
+
+### Validation states
+
+| Status | Meaning |
+|---|---|
+| `PASS` | Calculated and reported values reconcile |
+| `FAIL` | A required financial relationship does not reconcile |
+| `NOT_APPLICABLE` | Required operand is unavailable |
+
+The system never converts missing information into a fabricated PASS.
+
+---
+
+# 🔌 REST API
+
+Base path:
+
+```text
+/api/v1
+```
+
+Interactive API documentation:
+
+```text
+/docs
+```
+
+## Endpoints
+
+| Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/v1/documents/process` | Upload + process a document |
-| `GET`  | `/api/v1/documents/{document_name}` | Latest result for a document |
-| `GET`  | `/api/v1/documents` | List processed documents (filter/search) |
-| `GET`  | `/api/v1/health` | Health check |
+| `POST` | `/api/v1/documents/process` | Upload and process a document |
+| `GET` | `/api/v1/documents` | List processed documents |
+| `GET` | `/api/v1/documents/{document_name}` | Get latest result for a document |
+| `GET` | `/api/v1/health` | Health check |
 
-### 10.1 `POST /api/v1/documents/process`
-
-`multipart/form-data`: `file` (PDF/JPG/PNG, ≤3 pages) + `document_type`
-(`invoice` | `balance_sheet` | `profit_and_loss` | `cash_flow_statement`).
+## Process a document
 
 ```bash
 curl -X POST "http://localhost:8000/api/v1/documents/process" \
@@ -283,7 +548,16 @@ curl -X POST "http://localhost:8000/api/v1/documents/process" \
   -F "document_type=invoice"
 ```
 
-### 10.2 Example response shape
+Accepted document types:
+
+```text
+invoice
+balance_sheet
+profit_and_loss
+cash_flow_statement
+```
+
+## Example response
 
 ```json
 {
@@ -300,260 +574,561 @@ curl -X POST "http://localhost:8000/api/v1/documents/process" \
     "issues": []
   },
   "extracted_data": {
-    "company_name": {"value": "HDFC Bank Limited", "confidence": 0.95, "evidence": "HDFC  Bank  Limited"},
-    "currency": {"value": "INR", "confidence": 0.95},
-    "periods": ["2026", "2025"],
-    "financial_line_items": [
-      {"section": "assets", "name": "Cash and balances with Reserve Bank of India",
-       "values": {"2026": 200707.11, "2025": 144390.25}, "page_number": 1, "is_total": false}
-    ],
-    "totals": {
-      "total_assets": {"2026": 4908040.84, "2025": 4392417.42},
-      "total_liabilities": {"2026": 4908040.84, "2025": 4392417.42}
-    }
+    "company_name": {
+      "value": "HDFC Bank Limited",
+      "confidence": 0.95,
+      "evidence": "HDFC Bank Limited"
+    },
+    "currency": {
+      "value": "INR",
+      "confidence": 0.95
+    },
+    "periods": ["2026", "2025"]
   },
   "validation": {
-    "checks": [
-      {"name": "total_assets_equals_total_liabilities_and_equity",
-       "formula": "Total Capital & Liabilities == Total Assets",
-       "calculated_value": 4908040.84, "reported_value": 4908040.84,
-       "variance": 0.0, "status": "PASS", "period": "2026"}
-    ],
     "overall_status": "PASS",
     "issues": []
   },
   "processing_metadata": {
-    "ocr_used": true, "processed_at": "2026-09-10T15:34:54Z",
-    "processing_time_ms": 4752, "ocr_provider": "tesseract",
+    "ocr_used": true,
+    "ocr_provider": "tesseract",
     "extraction_provider": "rule_based"
   }
 }
 ```
 
-This is a real, actual response captured from the running pipeline against
-`dataset/Balance Sheet/Consolidated Balance Sheet 2026.pdf` — see `sample_outputs/` for the full,
-unedited files.
+---
 
-### 10.3 Other requests
+# 🗄️ Database
+
+The application uses a repository-based persistence layer:
+
+```text
+API
+ ↓
+Document Service
+ ↓
+Document Repository
+ ↓
+SQLAlchemy
+ ↓
+SQLite / PostgreSQL
+```
+
+The main `documents` table stores:
+
+- document name,
+- document type,
+- processing status,
+- file type,
+- page count,
+- support/readability status,
+- overall confidence,
+- file validation result,
+- extracted data,
+- validation result,
+- processing metadata,
+- timestamps.
+
+### Local
+
+SQLite is used by default.
+
+### Production
+
+PostgreSQL is recommended for persistent cloud storage.
+
+The database backend is selected through:
+
+```text
+DATABASE_URL
+```
+
+---
+
+# 📁 Project Structure
+
+```text
+IntelligentDox/
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── repositories/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── main.py
+│   │
+│   ├── tests/
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── static/
+│   ├── templates/
+│   ├── frontend_app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── dataset/
+├── docs/
+├── sample_outputs/
+├── scripts/
+├── uploads/
+│
+├── .env.example
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+# 💻 Local Setup
+
+## Prerequisites
+
+- Python 3.11+
+- Tesseract OCR
+- Git
+- Docker (optional)
+
+## 1. Clone the repository
 
 ```bash
-curl "http://localhost:8000/api/v1/documents"
-curl "http://localhost:8000/api/v1/documents?document_type=invoice&status=PASS"
-curl "http://localhost:8000/api/v1/documents/Consolidated%20Balance%20Sheet%202026.pdf"
-curl "http://localhost:8000/api/v1/health"
+git clone <your-repository-url>
+cd IntelligentDox
 ```
 
-### 10.4 Error responses
+## 2. Create a virtual environment
 
-Controlled, stack-trace-free JSON on every error path:
+### Windows PowerShell
 
-```json
-{ "error": { "code": "UNSUPPORTED_FILE_TYPE", "message": "Only PDF / JPG / PNG documents are supported." } }
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-| Status | Code | When |
-|---|---|---|
-| 400 | `INVALID_DOCUMENT_TYPE` | `document_type` isn't one of the 4 accepted values |
-| 400 | `EMPTY_FILE` | Uploaded file has 0 bytes |
-| 404 | `DOCUMENT_NOT_FOUND` | `GET /documents/{name}` for a name never processed |
-| 413 | `FILE_TOO_LARGE` | Exceeds `MAX_FILE_SIZE_MB` |
-| 415 | `UNSUPPORTED_FILE_TYPE` | Bad extension, or extension/content-signature mismatch |
-| 422 | `CORRUPTED_FILE` | File can't be decoded as a valid PDF/image |
-| 422 | `PAGE_LIMIT_EXCEEDED` | PDF has more than `MAX_PAGES` pages |
-| 422 | `VALIDATION_ERROR` | Malformed request (e.g. missing form field) |
-| 500 | `INTERNAL_ERROR` / `PROCESSING_ERROR` | Unexpected failure - never leaks a stack trace |
+### Windows CMD
 
-## 11. Environment Variables
+```cmd
+py -m venv .venv
+.venv\Scripts\activate.bat
+```
 
-See [`.env.example`](.env.example) for the full list with defaults. Key ones:
-
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | SQLite by default; point at PostgreSQL in production |
-| `MAX_FILE_SIZE_MB`, `MAX_PAGES` | Upload limits |
-| `OCR_LANGUAGE`, `TESSERACT_CMD`, `PDF_RENDER_DPI` | OCR tuning |
-| `LLM_PROVIDER`, `LLM_API_KEY`, `LLM_MODEL` | Optional LLM gap-fill; leave `LLM_PROVIDER=none` to disable |
-| `VALIDATION_ABSOLUTE_TOLERANCE`, `VALIDATION_RELATIVE_TOLERANCE` | Financial check tolerance |
-| `CORS_ORIGINS` | Comma-separated allowed origins, or `*` |
-
-Never commit a real `.env` file — it's gitignored.
-
-## 12. Local Setup
+### macOS / Linux
 
 ```bash
-# 1. Extract the dataset into ./dataset (already done in this checkout)
-
-# 2. Create and activate a virtualenv, install backend deps
-python -m venv .venv
-source .venv/Scripts/activate      # Windows Git Bash; use .venv\Scripts\activate.bat on cmd
-pip install -r backend/requirements.txt
-
-# 3. Install Tesseract OCR (not a pip package)
-#    Windows: winget install --id UB-Mannheim.TesseractOCR -e
-#    macOS:   brew install tesseract
-#    Linux:   apt-get install tesseract-ocr
-
-# 4. Copy environment config
-cp .env.example backend/.env
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 12.1 Running the backend
+## 3. Install backend dependencies
+
+```bash
+python -m pip install -r backend/requirements.txt
+```
+
+## 4. Install Tesseract
+
+### Windows
+
+```powershell
+winget install --id UB-Mannheim.TesseractOCR -e
+```
+
+### macOS
+
+```bash
+brew install tesseract
+```
+
+### Debian / Ubuntu
+
+```bash
+sudo apt-get install tesseract-ocr
+```
+
+## 5. Configure environment
+
+Copy:
+
+```text
+.env.example
+```
+
+to:
+
+```text
+backend/.env
+```
+
+Never commit a real `.env` file.
+
+---
+
+# ▶️ Running Locally
+
+## Backend
 
 ```bash
 cd backend
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-# Swagger UI:  http://127.0.0.1:8000/docs
-# Health:      http://127.0.0.1:8000/api/v1/health
 ```
 
-### 12.2 Running the frontend
+Backend:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Health:
+
+```text
+http://127.0.0.1:8000/api/v1/health
+```
+
+## Frontend
+
+Open a second terminal:
+
+```powershell
+cd frontend
+$env:BACKEND_URL="http://localhost:8000"
+python frontend_app.py
+```
+
+Dashboard:
+
+```text
+http://localhost:5000
+```
+
+---
+
+# 🐳 Docker
+
+The project contains independent Dockerfiles:
+
+```text
+backend/Dockerfile
+frontend/Dockerfile
+```
+
+Run the complete local stack:
 
 ```bash
-cd frontend
-pip install -r requirements.txt
-export BACKEND_URL=http://localhost:8000     # or `set` on Windows cmd
-python frontend_app.py
-# Dashboard: http://localhost:5000
+docker-compose up --build
 ```
 
-### 12.3 Running tests
+Services:
+
+```text
+Frontend → http://localhost:5000
+Backend  → http://localhost:8000
+Swagger  → http://localhost:8000/docs
+```
+
+---
+
+# ☁️ Railway Deployment
+
+The production deployment uses **two independent Railway services** from the same GitHub repository.
+
+## Backend service
+
+Configure:
+
+```text
+Root Directory = /backend
+```
+
+Railway uses:
+
+```text
+backend/Dockerfile
+```
+
+Required production configuration includes:
+
+```text
+DATABASE_URL=<PostgreSQL connection string>
+CORS_ORIGINS=<frontend public URL>
+OCR_LANGUAGE=eng
+```
+
+The Docker image should provide the Linux Tesseract dependency.
+
+## Frontend service
+
+Configure:
+
+```text
+Root Directory = /frontend
+```
+
+Railway uses:
+
+```text
+frontend/Dockerfile
+```
+
+Set:
+
+```text
+BACKEND_URL=<deployed backend URL>
+```
+
+## Production architecture
+
+```text
+                  ┌─────────────────────┐
+                  │       GitHub        │
+                  │   IntelligentDox    │
+                  └──────────┬──────────┘
+                             │
+                  ┌──────────┴──────────┐
+                  │                     │
+                  ▼                     ▼
+       ┌──────────────────┐  ┌──────────────────┐
+       │ Railway Backend  │  │ Railway Frontend │
+       │                  │  │                  │
+       │ /backend         │◄─┤ /frontend        │
+       │ FastAPI          │  │ Flask            │
+       │ Docker           │  │ Docker           │
+       └────────┬─────────┘  └──────────────────┘
+                │
+                ▼
+       ┌──────────────────┐
+       │ Railway          │
+       │ PostgreSQL       │
+       └──────────────────┘
+```
+
+---
+
+# 🔐 Environment Variables
+
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | Database connection |
+| `MAX_FILE_SIZE_MB` | Upload size limit |
+| `MAX_PAGES` | Maximum PDF pages |
+| `OCR_LANGUAGE` | Tesseract language |
+| `TESSERACT_CMD` | Optional Tesseract executable path |
+| `PDF_RENDER_DPI` | PDF-to-image rendering resolution |
+| `OCR_MIN_TEXT_CHARS` | Native text quality threshold |
+| `LLM_PROVIDER` | Optional LLM provider |
+| `LLM_API_KEY` | Optional LLM API key |
+| `LLM_MODEL` | Optional LLM model |
+| `LLM_TIMEOUT_SECONDS` | LLM request timeout |
+| `VALIDATION_ABSOLUTE_TOLERANCE` | Absolute financial tolerance |
+| `VALIDATION_RELATIVE_TOLERANCE` | Relative financial tolerance |
+| `CORS_ORIGINS` | Allowed frontend origins |
+| `LOG_LEVEL` | Application logging level |
+
+See [`.env.example`](.env.example) for the complete configuration.
+
+---
+
+# 🧪 Testing
+
+Run the backend test suite:
 
 ```bash
 cd backend
 python -m pytest tests/ -v
 ```
 
-48 tests across `test_validation.py` (file type/integrity/page-count rules),
-`test_extraction.py` (number parsing, unit/currency detection, per-document-type extraction against
-real dataset files, and financial-validation PASS/FAIL/NOT_APPLICABLE scenarios), and `test_api.py`
-(end-to-end HTTP behavior including error responses) — all currently passing.
+The test suite covers:
 
-## 13. Dataset Test Results
+- file type validation,
+- file integrity,
+- page-count rules,
+- number parsing,
+- currency/unit handling,
+- document-specific extraction,
+- financial validation,
+- PASS / FAIL / NOT_APPLICABLE scenarios,
+- API behavior,
+- controlled error responses.
 
-Running the full dataset (50 files) through the live API end-to-end (not a mock) using
-[`scripts/analyze_dataset.py`](scripts/analyze_dataset.py)'s companion batch-test run:
+**48 automated tests** were passing during development.
+
+---
+
+# 📊 Dataset Results
+
+The complete 50-file dataset was processed through the live API pipeline.
 
 | Category | Files | PASS | FAILED |
-|---|---|---|---|
+|---|---:|---:|---:|
 | Balance Sheet | 10 | 6 | 4 |
 | Cash Flow Statement | 10 | 7 | 3 |
 | Profit & Loss | 10 | 5 | 5 |
 | Invoices | 20 | 9 | 11 |
 | **Total** | **50** | **27 (54%)** | **23 (46%)** |
 
-Every `FAILED` result is a genuine "the arithmetic didn't reconcile" or "not enough was extracted from
-a low-quality scan/photo", never a crash — the pipeline never throws an unhandled exception on any of
-the 50 real files, and every response (PASS or FAILED) is a fully-formed, evidence-grounded JSON object
-a reviewer can inspect. The financial-statement PDFs (bank-format, comparative 2-period tables) reach
-55-70% full PASS despite being scanned images with no native text and, in several years, materially
-different numeric conventions (see §14); the harder photographed invoices/receipts — with skew,
-handwriting overlaid on printed text, and much more heterogeneous layouts — are naturally a lower-
-accuracy OCR problem, and the system's honesty here (reporting `FAILED` rather than fabricating a
-plausible-looking but wrong total) is the intended behavior per the case study's core principle.
+Importantly, the `FAILED` results were not application crashes.
 
-## 14. Known Limitations
+They represented either:
 
-- **OCR quality varies by source scan.** One balance sheet year in the dataset has visibly lower scan
-  quality than the others; several table rows OCR with digits dropped or merged, which the financial
-  validation engine correctly reports as `FAIL` rather than silently accepting bad numbers. This is
-  working as intended (don't fabricate), but it does mean extraction accuracy is bounded by input scan
-  quality.
-- **Comparative-year labels can be OCR-misread** (e.g. a "2023" header occasionally reads as "2003")
-  even when the *values* under that column are read correctly and the arithmetic still validates
-  correctly for that (mislabeled) period. The numbers are right; the year label attached to them can
-  occasionally be wrong.
-- **Photographed invoices are a harder problem than scanned statements**: skewed paper, handwriting/
-  stamps overlapping printed text, and complex multi-column layouts (vendor block beside an invoice-
-  metadata block at the same vertical position) all reduce OCR fidelity, and the two blocks can get
-  merged by the row-reconstruction heuristic that otherwise works well for simple 2-column financial
-  tables. Extraction on the cleanest invoices in the dataset is accurate; on the noisiest photographed
-  ones several fields legitimately come back `null` rather than guessed.
-- **Line-item column mapping is heuristic**, not a true table-structure model. It correctly separates
-  qty/price/amount on 2-4 column layouts (including detecting whether quantity leads or trails the
-  description) but is less reliable on complex GST invoices with many numeric columns (HSN code, two
-  rate columns, discount %, amount) where numbers are also embedded inside product descriptions.
-- **The optional LLM path was implemented against the documented Anthropic API but not exercised
-  end-to-end in this environment** (no API key was available during development) — treat it as
-  implemented-but-unverified. The deterministic pipeline is fully independent of it and was the one
-  validated against the whole dataset.
-- **Uploaded files are not retained** after processing (temp file is deleted once OCR/extraction
-  finishes) — only the structured result is persisted. Combined with SQLite's file being on local disk,
-  a production deployment on ephemeral storage should point `DATABASE_URL` at PostgreSQL (see §15).
+- genuine financial mismatches, or
+- insufficient extraction caused by low-quality scans/photos.
 
-## 15. Production Improvements
+The pipeline produced a structured, inspectable response for all 50 documents rather than silently fabricating values.
 
-- Point `DATABASE_URL` at managed PostgreSQL; SQLite is fine for local dev but its file won't survive
-  an ephemeral-filesystem redeploy on most PaaS platforms.
-- Add authentication/authorization on the processing endpoints (currently open, matching the case
-  study's scope).
-- Add image preprocessing before OCR (deskew, contrast normalization, upscaling) — would likely improve
-  the lower-quality scans and skewed phone photos noted in Limitations.
-- Replace the bounding-box row-clustering heuristic with a proper table-structure model (e.g. a
-  layout-aware model or a dedicated table-extraction library) for more reliable column alignment on
-  complex multi-column invoices.
-- Add object storage (S3-compatible) if uploaded originals need to be retained for audit/evidence
-  beyond the extracted JSON.
-- Background job queue for OCR (currently synchronous in the request) so large uploads don't block the
-  request thread under load.
+---
 
-## 16. AI Tools Used
+# ⚠️ Known Limitations
 
-This solution was built with **Claude Code** (Anthropic), used for:
-- code generation across the backend services, frontend, tests, and this documentation;
-- debugging assistance — most notably diagnosing why Tesseract's default text output scrambled table
-  row order (leading to the bounding-box row-reconstruction fix) and why one photographed invoice OCR'd
-  as pure noise (EXIF orientation);
-- architecture and design decisions (service/repository separation, the extraction alias-rule design,
-  the tolerance-based financial comparison);
-- iterative testing against the real dataset to find and fix extraction bugs (the whole 50-file dataset
-  was run through the live API repeatedly during development to drive these fixes, not just used for a
-  final demo).
+### OCR quality
 
-The case study explicitly permits generative AI assistance; no part of this is claimed as written
-without it.
+Poor scans can cause dropped or merged digits, directly limiting extraction accuracy.
 
-## 17. Deployment
+### Comparative-year labels
 
-**Local Docker:**
+OCR may occasionally misread a year label even when the corresponding financial values are correctly extracted.
 
-```bash
-docker-compose up --build
-# backend:  http://localhost:8000  (Swagger at /docs)
-# frontend: http://localhost:5000
-```
+### Photographed invoices
 
-**Cloud deployment (Render/Railway/Koyeb or equivalent):** this repo is deployment-ready but has not
-been deployed to a live cloud URL from this environment (no hosting credentials/platform access were
-available here). To deploy:
+Skew, handwriting, stamps, overlapping text, and complex layouts make photographed invoices significantly harder than clean financial statements.
 
-1. Push this repository to GitHub.
-2. Create a **Web Service** from `backend/Dockerfile` (or Render's native Python runtime, installing
-   `apt-get install tesseract-ocr` in the build step if not using the Dockerfile).
-3. Set environment variables from `.env.example` — in particular point `DATABASE_URL` at the platform's
-   managed PostgreSQL instance rather than SQLite.
-4. Create a second **Web Service** from `frontend/Dockerfile`, with `BACKEND_URL` set to the deployed
-   backend's public URL.
-5. Set `CORS_ORIGINS` on the backend to the frontend's deployed URL.
+### Table structure
 
-| | URL |
-|---|---|
-| Frontend | _fill in after deploying_ |
-| Backend API | _fill in after deploying_ |
-| Swagger | `<backend URL>/docs` |
-| Health | `<backend URL>/api/v1/health` |
-| GitHub repo | _fill in_ |
+The current row reconstruction approach is geometric/heuristic rather than a dedicated table-structure model.
 
-## 18. Final Submission Checklist
+### LLM path
 
-- [x] Backend starts and serves `/docs`
-- [x] Frontend starts and calls the backend API
-- [x] Database persists and returns results (`GET` by name, `GET` list)
-- [x] `/api/v1/health` works
-- [x] Invoice / balance sheet / P&L / cash flow processing all work against real dataset files
-- [x] Scanned-PDF and photographed-image OCR both work
-- [x] Invalid file / oversized-page-count uploads are rejected with controlled errors
-- [x] Financial validation produces real PASS/FAIL/NOT_APPLICABLE, never fabricated
-- [x] 48 automated tests passing
-- [x] Docker builds for both services
-- [x] Architecture diagram, dataset analysis, and sample outputs generated from the real pipeline
-- [ ] Deployed to a public URL (not done in this environment — see §17 for exact steps)
+The optional Anthropic extraction path is implemented but was not exercised end-to-end during development because an API key was unavailable.
+
+### File retention
+
+Uploaded originals are temporary and are deleted after processing. Structured results are persisted.
+
+---
+
+# 🚀 Future Improvements
+
+Potential production improvements include:
+
+1. **Image preprocessing**
+   - deskewing,
+   - contrast normalization,
+   - denoising,
+   - upscaling.
+
+2. **Layout-aware table extraction**
+   - replace heuristic row clustering with a dedicated document/table understanding model.
+
+3. **Authentication and authorization**
+   - protect processing and document endpoints.
+
+4. **Object storage**
+   - S3-compatible storage for original documents when long-term retention is required.
+
+5. **Asynchronous processing**
+   - background workers / job queues for heavy OCR workloads.
+
+6. **Improved invoice understanding**
+   - better handling of HSN codes, GST columns, discounts, and complex line-item layouts.
+
+---
+
+# 🤖 AI-Assisted Development
+
+The project was developed with assistance from **Claude Code**, particularly for:
+
+- code generation,
+- architecture and service separation,
+- debugging,
+- OCR pipeline improvements,
+- table reconstruction,
+- EXIF orientation handling,
+- extraction-rule development,
+- iterative testing,
+- documentation.
+
+AI assistance was used as a development tool; the resulting system was validated against the real project dataset and automated tests.
+
+---
+
+# 📚 Documentation
+
+Additional project documentation:
+
+- [`docs/architecture.png`](docs/architecture.png) — system architecture
+- [`docs/dataset_analysis.md`](docs/dataset_analysis.md) — dataset and OCR analysis
+- [`sample_outputs/`](sample_outputs/) — real pipeline output examples
+- [`scripts/analyze_dataset.py`](scripts/analyze_dataset.py) — dataset analysis utility
+- [`.env.example`](.env.example) — environment configuration reference
+
+---
+
+# ✅ Project Status
+
+| Component | Status |
+|---|:---:|
+| Document upload | ✅ |
+| File validation | ✅ |
+| Native PDF extraction | ✅ |
+| Tesseract OCR | ✅ |
+| OCR table reconstruction | ✅ |
+| Invoice extraction | ✅ |
+| Balance Sheet extraction | ✅ |
+| P&L extraction | ✅ |
+| Cash Flow extraction | ✅ |
+| Evidence + confidence | ✅ |
+| Financial validation | ✅ |
+| REST API | ✅ |
+| Swagger documentation | ✅ |
+| Flask dashboard | ✅ |
+| SQLite local persistence | ✅ |
+| PostgreSQL production support | ✅ |
+| Docker backend | ✅ |
+| Docker frontend | ✅ |
+| Automated tests | ✅ |
+| Railway deployment | ✅ |
+| Public frontend | ✅ |
+
+---
+
+# 🌐 Live Application
+
+**IntelligentDox:**  
+https://intelligentdox-front-production.up.railway.app/
+
+---
+
+## 📌 Submission Checklist
+
+- [x] Backend starts and exposes Swagger
+- [x] Frontend communicates with backend
+- [x] Health endpoint implemented
+- [x] Four document types supported
+- [x] Scanned PDFs supported
+- [x] Photographed images supported
+- [x] Financial validation implemented
+- [x] Controlled API error responses
+- [x] Automated tests
+- [x] Dockerized backend
+- [x] Dockerized frontend
+- [x] Architecture documentation
+- [x] Dataset analysis
+- [x] Sample outputs
+- [x] Public Railway deployment
+- [x] Public frontend URL
+
+---
+
+<p align="center">
+  <strong>IntelligentDox</strong><br>
+  Document Intelligence • OCR • Financial Validation • REST API
+</p>
