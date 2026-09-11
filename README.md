@@ -39,6 +39,14 @@ The application is deployed on **Railway** using separate containerized backend 
 ---
 ## 📸 Application Screenshots
 
+### Processed Documents Dashboard
+
+The dashboard maintains a view of processed documents, including document type, processing status, confidence, timestamps, and result access.
+
+<img src="docs/dashboard.png"
+     alt="IntelligentDox Processed Documents Dashboard"
+     width="100%">
+
 ### Deployment Dashboard
 
 The deployed IntelligentDox dashboard provides document upload, document-type selection, processing statistics, confidence scores, status tracking, search/filtering, and access to previously processed documents.
@@ -89,13 +97,7 @@ The deployed backend exposes interactive Swagger/OpenAPI documentation for testi
 
 ---
 
-### Processed Documents Dashboard
 
-The dashboard maintains a view of processed documents, including document type, processing status, confidence, timestamps, and result access.
-
-<img src="docs/dashboard.png"
-     alt="IntelligentDox Processed Documents Dashboard"
-     width="100%">
 ---
 ## ✨ Key Features
 
