@@ -37,7 +37,66 @@ The application is deployed on **Railway** using separate containerized backend 
 > **Note:** The backend public URL is intentionally not hardcoded here until it is finalized. The frontend communicates with the deployed backend through the `BACKEND_URL` environment variable.
 
 ---
+## 📸 Application Screenshots
 
+### Deployment Dashboard
+
+The deployed IntelligentDox dashboard provides document upload, document-type selection, processing statistics, confidence scores, status tracking, search/filtering, and access to previously processed documents.
+
+<img src="docs/deployment-dashboard.png"
+     alt="IntelligentDox Deployment Dashboard"
+     width="100%">
+
+---
+
+### Document Extraction & Evidence
+
+The document result page displays structured extracted information along with confidence scores, page references, and supporting OCR evidence for extracted fields.
+
+<img src="docs/extraction-result.png"
+     alt="IntelligentDox Document Extraction Result"
+     width="100%">
+
+---
+
+### Financial Validation & JSON Output
+
+Financial relationships are validated using configurable rules and tolerances. The result page also exposes the structured JSON response containing extraction results, confidence, evidence, file validation, and validation calculations.
+
+<img src="docs/validation-result.png"
+     alt="IntelligentDox Financial Validation and JSON Output"
+     width="100%">
+
+---
+
+### Validation Failure Scenario
+
+IntelligentDox also handles documents that fail validation, allowing mismatches and processing outcomes to be surfaced instead of silently accepting incorrect results.
+
+<img src="docs/failed-result.png"
+     alt="IntelligentDox Validation Failure Result"
+     width="100%">
+
+---
+
+### Swagger / OpenAPI
+
+The deployed backend exposes interactive Swagger/OpenAPI documentation for testing and exploring the REST API endpoints.
+
+<img src="docs/swagger.png"
+     alt="IntelligentDox Swagger OpenAPI Documentation"
+     width="100%">
+
+---
+
+### Processed Documents Dashboard
+
+The dashboard maintains a view of processed documents, including document type, processing status, confidence, timestamps, and result access.
+
+<img src="docs/dashboard.png"
+     alt="IntelligentDox Processed Documents Dashboard"
+     width="100%">
+---
 ## ✨ Key Features
 
 - 📄 **Multi-format document ingestion** — PDF, JPG, and PNG
