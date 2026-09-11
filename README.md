@@ -21,10 +21,14 @@ The platform accepts **PDF, JPG, and PNG** documents, combines native PDF extrac
 **Frontend:**  
 https://intelligentdox-front-production.up.railway.app/
 | **Backend API** | [IntelligentDox API](https://intelligentdox-production-d0fc.up.railway.app/) |
+
 | **Swagger / OpenAPI** | [Interactive API Documentation](https://intelligentdox-production-d0fc.up.railway.app/docs) |
+
 | **Health Check** | `https://intelligentdox-production-d0fc.up.railway.app/api/v1/health` |
+
 | **Example Document Result** | [Consolidated Cash Flow Statement 2020](https://intelligentdox-front-production.up.railway.app/document/Consolidated%20Cash%20Flow%20Statement%202020.pdf) |
-| **GitHub Repository** | _Add public repository URL here_ |
+
+| **GitHub Repository** | https://github.com/nishant-cipher/IntelligentDox |
 
 The application is deployed on **Railway** using separate containerized backend and frontend services.
 
